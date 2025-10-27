@@ -170,7 +170,7 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Deploy assets to server
+      - name: Deploy assets to server "${{ secrets.SSH_PRIVATE_KEY }}"
         run: |
           rsync -avz --delete --progress \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
