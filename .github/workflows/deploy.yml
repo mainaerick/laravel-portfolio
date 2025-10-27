@@ -152,7 +152,7 @@ jobs:
 
     environment:
       name: production
-      url: https://ampcore.fluxnerve.com
+      url: https://portfolio.fluxnerve.com
 
     steps:
       - name: Checkout code
