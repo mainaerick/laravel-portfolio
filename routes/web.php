@@ -13,7 +13,7 @@ use Inertia\Inertia;
 //        'phpVersion' => PHP_VERSION,
 //    ]);
 //});
-Route::get('/', fn() => Inertia::render('Home'));
+Route::get('/', fn() => Inertia::render('Portfolio'));
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

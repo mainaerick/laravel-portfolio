@@ -12,8 +12,15 @@ export default {
 
     theme: {
         extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+            colors: {
+                background: '#0f0f1e',
+                foreground: '#e0e0ff',
+                primary: '#7c3aed',
+                secondary: '#06b6d4',
+                accent: '#a78bfa',
+            },
+            backgroundImage: {
+                'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
             },
         },
     },
