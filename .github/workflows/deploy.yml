@@ -1,0 +1,286 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+      - production
+  workflow_dispatch: # Allows manual triggering
+
+env:
+  NODE_VERSION: '20'
+  PHP_VERSION: '8.3'
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, pdo_mysql, bcmath, soap, intl, gd, exif, iconv, redis
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress --optimize-autoloader
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Generate Ziggy routes for TypeScript
+        run: php artisan ziggy:generate
+
+      - name: Build assets for testing
+        run: npm run build
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan config:clear
+
+      - name: Run PHP tests
+        run: php artisan test --parallel
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: testing
+          DB_USERNAME: root
+          DB_PASSWORD: password
+          REDIS_HOST: 127.0.0.1
+
+      - name: Run JavaScript tests (if applicable)
+        run: npm run test --if-present
+
+  build:
+    name: Build Inertia + React Assets
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: dom, curl, libxml, mbstring, zip
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Ziggy routes
+        run: php artisan ziggy:generate
+
+      - name: Build production assets (Vite + React + SSR)
+        run: npm run build
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          ASSET_URL: ${{ secrets.ASSET_URL }}
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Verify build output
+        run: |
+          if [ ! -d "public/build/assets" ]; then
+            echo "❌ Build failed - client assets directory missing"
+            exit 1
+          fi
+          if [ ! -d "bootstrap/ssr" ]; then
+            echo "❌ Build failed - SSR directory missing"
+            exit 1
+          fi
+          echo "✅ Client-side build successful"
+          ls -lah public/build/
+          echo "✅ SSR build successful"
+          ls -lah bootstrap/ssr/
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-assets
+          path: |
+            public/build/
+            bootstrap/ssr/
+          retention-days: 1
+
+  deploy:
+    name: Deploy to Production (Sail)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+
+    environment:
+      name: production
+      url: https://ampcore.fluxnerve.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-assets
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy assets to server
+        run: |
+          rsync -avz --delete --progress \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            public/build/ ${{ secrets.REMOTE_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PATH }}/public/build/
+
+          rsync -avz --delete --progress \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            bootstrap/ssr/ ${{ secrets.REMOTE_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.SERVER_PATH }}/bootstrap/ssr/
+
+      - name: Deploy application and restart Sail
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.REMOTE_USER }}@${{ secrets.SERVER_IP }} << 'ENDSSH'
+          set -e
+          cd ${{ secrets.SERVER_PATH }}
+
+          echo "📥 Pulling latest code..."
+          git fetch origin
+          git reset --hard origin/main
+
+          echo "🔧 Setting environment variables..."
+          export WWWUSER=$(id -u)
+          export WWWGROUP=$(id -g)
+
+          echo "📦 Installing Composer dependencies (always needed after git pull)..."
+          if command -v composer &> /dev/null; then
+              composer install --ignore-platform-reqs --no-interaction
+          else
+              echo "Using Docker to install..."
+              docker run --rm -v "$(pwd)":/app -w /app laravelsail/php83-composer:latest composer install --ignore-platform-reqs --no-interaction
+          fi
+
+          echo "✅ Verifying Sail is available..."
+          if [ ! -f "./vendor/bin/sail" ]; then
+              echo "❌ Sail not found in vendor/bin after composer install"
+              ls -la vendor/bin/ || echo "vendor/bin/ doesn't exist"
+              exit 1
+          fi
+
+          echo "⚙️  Ensuring .env exists..."
+          if [ ! -f ".env" ]; then
+              cp .env.example .env
+          fi
+
+          echo "🐳 Stopping existing containers..."
+          ./vendor/bin/sail down --remove-orphans || true
+
+          echo "🚀 Building and starting containers..."
+          ./vendor/bin/sail up -d --build
+
+          echo "⏳ Waiting for containers to be ready..."
+          sleep 25
+
+          echo "📦 Installing production dependencies in container..."
+          ./vendor/bin/sail composer install --optimize-autoloader --no-interaction
+
+          echo "🔄 Running database migrations..."
+          ./vendor/bin/sail artisan migrate --force
+
+          echo "🔗 Creating storage link..."
+          ./vendor/bin/sail artisan storage:link || true
+
+          echo "🧹 Optimizing application..."
+          ./vendor/bin/sail artisan optimize:clear
+          ./vendor/bin/sail artisan config:cache
+          ./vendor/bin/sail artisan route:cache
+          ./vendor/bin/sail artisan view:cache
+
+          echo "🔄 Restarting queue workers..."
+          ./vendor/bin/sail artisan queue:restart || true
+
+          echo "✅ Deployment complete!"
+          ./vendor/bin/sail ps
+          ENDSSH
+
+      - name: Wait for application to be ready
+        run: |
+          echo "⏳ Giving application extra time to fully start..."
+          sleep 10
+
+      - name: Health check
+        run: |
+          for i in {1..5}; do
+            STATUS=$(curl -f -s -o /dev/null -w "%{http_code}" ${{ secrets.APP_URL }} || echo "000")
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ Application is healthy (HTTP $STATUS)"
+              exit 0
+            fi
+            echo "⏳ Waiting for application to respond... ($i/5) - Status: $STATUS"
+            sleep 10
+          done
+          echo "❌ Health check failed - application not responding"
+          exit 1
+
+      - name: Cleanup
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
+
+  notify:
+    name: Notify Deployment Status
+    runs-on: ubuntu-latest
+    needs: [test, build, deploy]
+    if: always()
+
+    steps:
+      - name: Send notification
+        run: |
+          if [ "${{ needs.deploy.result }}" == "success" ]; then
+            echo "✅ Deployment successful to production"
+            echo "🔗 URL: ${{ secrets.APP_URL }}"
+          else
+            echo "❌ Deployment failed"
+            echo "Check logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          fi
