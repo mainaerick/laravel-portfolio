@@ -1,11 +1,12 @@
 import React from 'react';
+import Navbar from '@/Components/NavBar';
+import HeroSection from '@/Components/HeroSection';
 
-function Portfolio(props) {
+function Portfolio() {
     return (
         <div className="min-h-screen bg-background text-foreground">
-            Home Hello
-            {/*<Navbar />*/}
-            {/*<HeroSection />*/}
+            <Navbar  activeSection={'home'}/>
+            <HeroSection />
             {/*<AboutSection />*/}
             {/*<ProjectsSection projects={projects} />*/}
             {/*<ContactSection />*/}
