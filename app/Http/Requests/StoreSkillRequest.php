@@ -11,7 +11,7 @@ class StoreSkillRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->can('manage-projects') ?? true;
     }
 
     /**
@@ -22,7 +22,7 @@ class StoreSkillRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255',
         ];
     }
 }

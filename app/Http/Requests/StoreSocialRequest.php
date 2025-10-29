@@ -11,7 +11,7 @@ class StoreSocialRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->can('manage-projects') ?? true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreSocialRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'provider' => 'required|string|max:255',
+            'url' => 'required|string|max:255',
         ];
     }
 }

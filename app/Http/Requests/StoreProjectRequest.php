@@ -11,7 +11,7 @@ class StoreProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->can('manage-projects') ?? true;
     }
 
     /**
@@ -22,7 +22,16 @@ class StoreProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:projects,slug,' . $this->route('project'),
+            'description' => 'nullable|string',
+            'thumbnail' => 'nullable|image|max:2048',
+            'github' => 'nullable|url',
+            'live_url' => 'nullable|url',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|max:50',
+            'is_featured' => 'nullable|boolean',
+            'order' => 'nullable|integer'
         ];
     }
 }
