@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('skills', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique();
+            $table->string('icon')->nullable(); // optional icon path/class
+            $table->unsignedInteger('order')->default(0);
             $table->timestamps();
         });
     }
