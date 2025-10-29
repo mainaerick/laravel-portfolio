@@ -1,10 +1,10 @@
 import React from 'react';
 import Navbar from '@/Components/NavBar';
-import HeroSection from '@/Components/HeroSection';
-import AboutSection from '@/Components/AboutSection';
-import ProjectsSection from '@/Components/ProjectsSection';
-import ContactSection from '@/Components/ContactSection';
-import Footer from '@/Components/Footer';
+import HeroSection from '@/Components/Sections/HeroSection';
+import AboutSection from '@/Components/Sections/AboutSection';
+import ProjectsSection from '@/Components/Sections/ProjectsSection';
+import ContactSection from '@/Components/Sections/ContactSection';
+import Footer from '@/Components/Sections/Footer';
 
 function Portfolio() {
     return (
