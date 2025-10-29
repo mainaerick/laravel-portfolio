@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Social extends Model
 {
-    //
+    protected $fillable = ['provider', 'url', 'label', 'order'];
+
 }
