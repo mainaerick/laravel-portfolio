@@ -11,7 +11,7 @@ class StoreAboutRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return $this->user()?->can('manage-portfolio') ?? true;
     }
 
     /**
@@ -22,7 +22,14 @@ class StoreAboutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'bio' => ['nullable', 'string'],
+            'resume_url' => ['nullable', 'url'],
+            'cta_label' => ['required', 'string', 'max:100'],
+            'cta_link' => ['required', 'string', 'max:255'],
+            'avatar' => ['nullable', 'string', 'max:255'], // if file uploads, handle separately
         ];
     }
 }

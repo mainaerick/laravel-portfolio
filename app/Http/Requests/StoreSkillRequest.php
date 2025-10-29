@@ -11,7 +11,7 @@ class StoreSkillRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()?->can('manage-projects') ?? true;
+        return $this->user()?->can('manage-portfolio') ?? true;
     }
 
     /**
