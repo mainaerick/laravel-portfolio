@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('socials', function (Blueprint $table) {
             $table->id();
+            $table->string('provider'); // github, linkedin, twitter, email
+            $table->string('url');
+            $table->string('label')->nullable();
+            $table->unsignedInteger('order')->default(0);
             $table->timestamps();
         });
     }
