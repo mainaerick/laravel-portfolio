@@ -27,7 +27,18 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
-
+        DB::table('about')->insert([
+            'name' => 'Eric N.',
+            'title' => 'Full Stack Developer',
+            'subtitle' => 'Building elegant, high-performing web solutions.',
+            'bio' => 'I’m a passionate developer who loves crafting modern web apps using Laravel, React, and Firebase. My focus is on creating smooth user experiences and scalable systems.',
+            'resume_url' => 'https://yourportfolio.com/resume.pdf',
+            'cta_label' => 'View My Work',
+            'cta_link' => '#projects',
+            'avatar' => '/images/profile-avatar.png',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
         // SKILLS
         $skills = [
             ['name' => 'React', 'icon' => 'logos:react', 'order' => 1],
