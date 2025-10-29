@@ -4,6 +4,7 @@ import HeroSection from '@/Components/HeroSection';
 import AboutSection from '@/Components/AboutSection';
 import ProjectsSection from '@/Components/ProjectsSection';
 import ContactSection from '@/Components/ContactSection';
+import Footer from '@/Components/Footer';
 
 function Portfolio() {
     return (
@@ -13,7 +14,7 @@ function Portfolio() {
             <AboutSection />
             <ProjectsSection />
             <ContactSection />
-            {/*<Footer />*/}
+            <Footer />
         </div>
     );
 }
