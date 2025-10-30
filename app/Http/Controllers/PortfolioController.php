@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\About;
 use App\Models\Contact;
 use App\Models\Project;
+use App\Models\Skill;
 use App\Models\Social;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -21,12 +22,14 @@ class PortfolioController extends Controller
             ->get(['id', 'title', 'slug', 'description', 'thumbnail', 'live_url'])
         );
         $contact = Cache::remember('portfolio.contact', 3600, fn() => Contact::first());
-        $socials = Cache::remember('portfolio.socialss', 3600, fn() => Social::all());
+        $socials = Cache::remember('portfolio.socials', 3600, fn() => Social::all());
+        $skills = Cache::remember('portfolio.skills', 3600, fn() => Skill::all());
         return Inertia::render('Portfolio', [
             'about' => $about,
             'projects' => $projects,
             'contact' => $contact,
             'socials' => $socials,
+            'skills' => $skills,
         ]);
     }
 }

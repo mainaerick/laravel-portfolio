@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('title');
             $table->string('subtitle')->nullable();
-            $table->text('bio')->nullable();
+            $table->text('short_bio')->nullable();
+            $table->text('long_bio')->nullable();
             $table->string('resume_url')->nullable();
             $table->string('cta_label')->default('Get in Touch');
             $table->string('cta_link')->default('#contact');

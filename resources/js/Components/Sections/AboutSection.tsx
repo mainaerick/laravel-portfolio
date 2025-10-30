@@ -1,22 +1,27 @@
 
 import { motion } from "framer-motion"
 import SkillBadge from '@/Components/SkillBadge';
+import { About, Skill } from '@/lib/models';
 
-export default function AboutSection() {
-    const skills = [
-        "React",
-        "TypeScript",
-        "Next.js",
-        "Tailwind CSS",
-        "Node.js",
-        "PostgreSQL",
-        "GraphQL",
-        "Framer Motion",
-        "Web Design",
-        "UI/UX",
-        "Performance",
-        "Accessibility",
-    ]
+interface Props{
+    about:About
+    skills:Skill[]
+}
+export default function AboutSection({about,skills}:Props) {
+    // const skills = [
+    //     "React",
+    //     "TypeScript",
+    //     "Next.js",
+    //     "Tailwind CSS",
+    //     "Node.js",
+    //     "PostgreSQL",
+    //     "GraphQL",
+    //     "Framer Motion",
+    //     "Web Design",
+    //     "UI/UX",
+    //     "Performance",
+    //     "Accessibility",
+    // ]
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -38,6 +43,7 @@ export default function AboutSection() {
         },
     }
 
+    console.log(about)
     return (
         <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
             <div className="absolute inset-0 -z-10">
@@ -69,7 +75,7 @@ export default function AboutSection() {
                         className="relative"
                     >
                         <div className="relative w-full aspect-square rounded-2xl overflow-hidden border border-neon-purple/20 bg-gradient-to-br from-neon-purple/10 to-neon-blue/10 backdrop-blur-sm">
-                            <img src="/developer-profile.jpg" alt="Profile" className="w-full h-full object-cover" />
+                            <img src={about.avatar||"/developer-profile.jpg"} alt="Profile" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
                         </div>
                     </motion.div>
@@ -87,9 +93,7 @@ export default function AboutSection() {
                         </p>
 
                         <p className="text-lg text-foreground/80 leading-relaxed">
-                            My journey in tech started with a curiosity about how things work. Today, I combine that curiosity with
-                            modern development practices to deliver exceptional results. I'm particularly interested in performance
-                            optimization, accessibility, and creating delightful user experiences.
+                            {about.long_bio}
                         </p>
 
                         <div>
@@ -102,8 +106,8 @@ export default function AboutSection() {
                                 className="flex flex-wrap gap-3"
                             >
                                 {skills.map((skill) => (
-                                    <motion.div key={skill} variants={itemVariants}>
-                                        <SkillBadge skill={skill} />
+                                    <motion.div key={skill.id} variants={itemVariants}>
+                                        <SkillBadge skill={skill.name} />
                                     </motion.div>
                                 ))}
                             </motion.div>

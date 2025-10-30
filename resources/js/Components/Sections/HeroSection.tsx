@@ -8,13 +8,6 @@ interface Props{
     about:About
 }
 export default function HeroSection({socialLinks,about}:Props) {
-    // const socialLinks = [
-    //     { icon: Github, href: "#", label: "GitHub" },
-    //     { icon: Linkedin, href: "#", label: "LinkedIn" },
-    //     { icon: Mail, href: "#", label: "Email" },
-    // ]
-
-    console.log(socialLinks)
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -74,7 +67,7 @@ export default function HeroSection({socialLinks,about}:Props) {
                     variants={itemVariants}
                     className="text-lg sm:text-xl text-foreground/70 mb-8 max-w-2xl mx-auto leading-relaxed"
                 >
-                    {about.bio}
+                    {about.short_bio}
                 </motion.p>
 
                 <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center mb-12">

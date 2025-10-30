@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAboutRequest;
 use App\Http\Requests\UpdateAboutRequest;
 use App\Models\About;
+use Inertia\Inertia;
 
 class AboutController extends Controller
 {
@@ -15,7 +16,7 @@ class AboutController extends Controller
     {
         $about = About::first();
         return Inertia::render('Admin/HeroSection/Index', [
-            'hero' => $aboit,
+            'about' => $about,
         ]);
     }
 
