@@ -16,7 +16,7 @@ export interface Social {
     id: number;
     provider: string;       // e.g. "github", "linkedin", "twitter", "email"
     url: string;            // full link or mailto
-    label?: string | null;  // optional display label
+    label: string | null;  // optional display label
     order: number;          // default: 0
     created_at: string;     // ISO date string (e.g. "2025-10-30T12:34:56Z")
     updated_at: string;

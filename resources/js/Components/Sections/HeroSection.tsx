@@ -14,6 +14,7 @@ export default function HeroSection({socialLinks,about}:Props) {
     //     { icon: Mail, href: "#", label: "Email" },
     // ]
 
+    console.log(socialLinks)
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -94,11 +95,11 @@ export default function HeroSection({socialLinks,about}:Props) {
                 </motion.div>
 
                 <motion.div variants={itemVariants} className="flex gap-6 justify-center">
-                    {socialLinks.map((social,key) => {
+                    {socialLinks.map((social) => {
                         const Icon = iconMap[social.provider.toLowerCase()];
                         return (
                             <motion.a
-                                key={social.label+key}
+                                key={social.label}
                                 href={social.url}
                                 whileHover={{ scale: 1.2, y: -5 }}
                                 whileTap={{ scale: 0.95 }}
