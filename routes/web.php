@@ -15,7 +15,9 @@ use Inertia\Inertia;
 //    ]);
 //});
 Route::get('/', [PortfolioController::class, 'index'])->name('portfolio');
-
+Route::get('admin/', function () {
+    return Inertia::render('Admin/Dashboard');
+});
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

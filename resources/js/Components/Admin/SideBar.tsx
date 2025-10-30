@@ -1,5 +1,3 @@
-"use client"
-
 import { cn } from "@/lib/utils"
 import { LayoutDashboard, User, FolderOpen, Tag, Zap, Share2, Mail, Users } from "lucide-react"
 import { Link } from '@inertiajs/react';
