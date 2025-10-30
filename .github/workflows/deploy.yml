@@ -241,7 +241,7 @@ jobs:
           ./vendor/bin/sail composer install --optimize-autoloader --no-interaction
 
           echo "🔄 Running database migrations..."
-          ./vendor/bin/sail artisan migrate --force
+          ./vendor/bin/sail artisan migrate:fresh --seed --force
 
           echo "🔗 Creating storage link..."
           ./vendor/bin/sail artisan storage:link || true

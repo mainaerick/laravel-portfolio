@@ -5,12 +5,18 @@ import AboutSection from '@/Components/Sections/AboutSection';
 import ProjectsSection from '@/Components/Sections/ProjectsSection';
 import ContactSection from '@/Components/Sections/ContactSection';
 import Footer from '@/Components/Sections/Footer';
+import { About, Social } from '@/lib/models';
 
-function Portfolio() {
+interface Props{
+    about:About
+    socials:Social[]
+}
+function Portfolio({about,socials}:Props) {
+    console.log(about)
     return (
         <div className="min-h-screen bg-background text-foreground">
             <Navbar  activeSection={'home'}/>
-            <HeroSection />
+            <HeroSection about={about} socialLinks={socials}/>
             <AboutSection />
             <ProjectsSection />
             <ContactSection />

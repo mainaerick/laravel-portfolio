@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
-        DB::table('about')->insert([
+        DB::table('abouts')->insert([
             'name' => 'Eric N.',
             'title' => 'Full Stack Developer',
             'subtitle' => 'Building elegant, high-performing web solutions.',

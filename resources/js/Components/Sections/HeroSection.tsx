@@ -1,13 +1,18 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Github, Linkedin, Mail, ExternalLink } from "lucide-react"
+import { Github, Linkedin, Mail,Twitter, ExternalLink } from "lucide-react"
+import { About, Social } from '@/lib/models';
 
-export default function HeroSection() {
-    const socialLinks = [
-        { icon: Github, href: "#", label: "GitHub" },
-        { icon: Linkedin, href: "#", label: "LinkedIn" },
-        { icon: Mail, href: "#", label: "Email" },
-    ]
+interface Props{
+    socialLinks:Social[]
+    about:About
+}
+export default function HeroSection({socialLinks,about}:Props) {
+    // const socialLinks = [
+    //     { icon: Github, href: "#", label: "GitHub" },
+    //     { icon: Linkedin, href: "#", label: "LinkedIn" },
+    //     { icon: Mail, href: "#", label: "Email" },
+    // ]
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -28,6 +33,13 @@ export default function HeroSection() {
             transition: { duration: 0.8, ease: "easeOut" },
         },
     }
+    const iconMap: Record<string, any> = {
+        github: Github,
+        linkedin: Linkedin,
+        externallink: ExternalLink,
+        email: Mail,
+        twitter:Twitter
+    };
 
     return (
         <div className="min-h-screen flex items-center justify-center pt-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -51,18 +63,17 @@ export default function HeroSection() {
 
                 <motion.h1 variants={itemVariants} className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
           <span className="bg-gradient-to-r from-neon-purple via-foreground to-neon-blue bg-clip-text text-transparent">
-            Full Stack Developer
+            {about.title}
           </span>
                     <br />
-                    <span className="text-foreground">& Creative Technologist</span>
+                    <span className="text-foreground">{about.subtitle}</span>
                 </motion.h1>
 
                 <motion.p
                     variants={itemVariants}
                     className="text-lg sm:text-xl text-foreground/70 mb-8 max-w-2xl mx-auto leading-relaxed"
                 >
-                    I craft beautiful, performant web experiences that blend cutting-edge design with robust engineering. Let's
-                    build something extraordinary together.
+                    {about.bio}
                 </motion.p>
 
                 <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -83,17 +94,17 @@ export default function HeroSection() {
                 </motion.div>
 
                 <motion.div variants={itemVariants} className="flex gap-6 justify-center">
-                    {socialLinks.map((social) => {
-                        const Icon = social.icon
+                    {socialLinks.map((social,key) => {
+                        const Icon = iconMap[social.provider.toLowerCase()];
                         return (
                             <motion.a
-                                key={social.label}
-                                href={social.href}
+                                key={social.label+key}
+                                href={social.url}
                                 whileHover={{ scale: 1.2, y: -5 }}
                                 whileTap={{ scale: 0.95 }}
                                 className="p-3 rounded-full bg-neon-purple/10 border border-neon-purple/30 text-neon-purple hover:bg-neon-purple/20 transition-colors"
                             >
-                                <Icon className="w-5 h-5" />
+                                <Icon/>
                             </motion.a>
                         )
                     })}

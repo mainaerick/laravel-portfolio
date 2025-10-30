@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -13,7 +14,7 @@ use Inertia\Inertia;
 //        'phpVersion' => PHP_VERSION,
 //    ]);
 //});
-Route::get('/', fn() => Inertia::render('Portfolio'));
+Route::get('/', [PortfolioController::class, 'index'])->name('portfolio');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
