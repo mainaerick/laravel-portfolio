@@ -15,7 +15,7 @@ class AboutController extends Controller
     public function index()
     {
         $about = About::first();
-        return Inertia::render('Admin/HeroSection/Index', [
+        return Inertia::render('Admin/About/Index', [
             'about' => $about,
         ]);
     }

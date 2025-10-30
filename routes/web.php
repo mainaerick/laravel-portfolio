@@ -15,7 +15,10 @@ use Inertia\Inertia;
 //    ]);
 //});
 Route::get('/', [PortfolioController::class, 'index'])->name('portfolio');
-Route::get('admin/', function () {
+
+Route::get('admin/about', [\App\Http\Controllers\AboutController::class, 'index'])->name('about.index');
+
+Route::get('/admin', function () {
     return Inertia::render('Admin/Dashboard');
 });
 Route::get('/dashboard', function () {
