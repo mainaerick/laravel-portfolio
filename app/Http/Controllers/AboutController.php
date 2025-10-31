@@ -84,23 +84,29 @@ class AboutController extends Controller
             'subtitle' => 'nullable|string|max:255',
             'short_bio' => 'nullable|string',
             'long_bio' => 'nullable|string',
-            'resume_url' => 'nullable|url',
             'cta_label' => 'required|string|max:255',
             'cta_link' => 'required|string|max:255',
-            'avatar' => 'nullable|image|max:2048',
+            'avatar_file' => 'nullable|image|max:2048',
+            'resume_file' => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
-        if ($request->hasFile('avatar')) {
+        if ($request->hasFile('avatar_file')) {
             // Delete old avatar if exists
             if ($about->avatar) {
                 Storage::disk('public')->delete($about->avatar);
             }
 
-            $validated['avatar'] = $request->file('avatar')->store('avatars', 'public');
+            $validated['avatar'] = $request->file('avatar_file')->store('avatars', 'public');
         }
 
+        // Handle resume upload
+        if ($request->hasFile('resume_file')) {
+            if ($about->resume_file) {
+                Storage::disk('public')->delete($about->resume_file);
+            }
+            $validated['resume_url'] = $request->file('resume_file')->store('resumes', 'public');
+        }
         $about->update($validated);
-
         return redirect()->route('admin.about.index')
             ->with('success', 'About section updated successfully.');
     }

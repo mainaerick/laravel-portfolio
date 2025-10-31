@@ -11,7 +11,7 @@ class UpdateAboutRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()?->can('manage-portfolio') ?? true;
+        return true;
     }
 
     /**

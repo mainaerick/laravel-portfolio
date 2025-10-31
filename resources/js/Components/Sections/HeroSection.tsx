@@ -78,13 +78,24 @@ export default function HeroSection({socialLinks,about}:Props) {
                         View My Work
                         <ExternalLink className="ml-2 w-4 h-4" />
                     </Button>
-                    <Button
-                        size="lg"
-                        variant="outline"
-                        className="border-neon-purple/30 hover:bg-neon-purple/10 text-base bg-transparent"
-                    >
-                        Download Resume
-                    </Button>
+                    {about.resume_url && (
+                        <Button
+                            size="lg"
+                            variant="outline"
+                            className="border-neon-purple/30 hover:bg-neon-purple/10 text-base bg-transparent"
+                            asChild
+                        >
+                            <a
+                                href={`/storage/${about.resume_url}`}
+                                download
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Download Resume
+                            </a>
+                        </Button>
+                    )}
+
                 </motion.div>
 
                 <motion.div variants={itemVariants} className="flex gap-6 justify-center">
