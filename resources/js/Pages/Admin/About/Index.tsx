@@ -22,9 +22,22 @@ type AboutFormData = Omit<About, 'id' | 'created_at' | 'updated_at'>;
 interface Props {
     about: About;
 }
-
+// interface AboutFormData {
+//     name: string;
+//     title: string;
+//     subtitle: string;
+//     short_bio: string;
+//     long_bio: string;
+//     resume_url: string;
+//     cta_label: string;
+//     cta_link: string;
+//     avatar: string;
+//     avatar_file: File | null;
+//     resume_file?: File | null;
+//     _method: string;
+// }
 export default function AboutPage({ about }: Props) {
-    const { data, setData, post, processing, progress, errors } = useForm<any>({
+    const { data, setData, post, processing, progress, errors } = useForm<AboutFormData>({
         name: about.name || '',
         title: about.title || '',
         subtitle: about.subtitle || '',
@@ -35,6 +48,7 @@ export default function AboutPage({ about }: Props) {
         cta_link: about.cta_link || '#contact',
         avatar: about.avatar || '',
         avatar_file: null,
+        resume_file:null,
         _method: 'PUT'
     });
 
@@ -42,7 +56,9 @@ export default function AboutPage({ about }: Props) {
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
         const { name, value, type } = e.target;
-        setData(name as keyof typeof data, value);
+        if (name in data) {
+            setData(name as keyof typeof data as any, value as any);
+        }
     };
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,10 +71,7 @@ export default function AboutPage({ about }: Props) {
         e.preventDefault();
 
         post(`/admin/about/${about.id}`, {
-            data: {
-                ...data,
-                _method: 'put' // Spoof PUT method
-            },
+           method: 'put', // Spoof PUT method
             forceFormData: true, // Always use FormData
             onSuccess: () => {
                 toast('Success', {
@@ -73,7 +86,6 @@ export default function AboutPage({ about }: Props) {
         });
     };
 
-    console.log(data.avatar_url);
     return (
         <AdminLayout>
             <form onSubmit={handleSave} className="p-6 space-y-6">

@@ -8,9 +8,13 @@ export interface About {
     resume_url?: string | null;
     cta_label: string;      // default: "Get in Touch"
     cta_link: string;       // default: "#contact"
-    avatar?: File | null | string; // optional image path
+    avatar?: string; // optional image path
+    avatar_file?:File|null;
+    resume_file?:File|null;
     created_at: string;     // ISO date string (e.g. "2025-10-30T12:34:56Z")
     updated_at: string;
+    _method: string;
+
 }
 
 export interface Social {
