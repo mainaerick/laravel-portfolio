@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -16,11 +17,15 @@ use Inertia\Inertia;
 //});
 Route::get('/', [PortfolioController::class, 'index'])->name('portfolio');
 
-Route::get('admin/about', [\App\Http\Controllers\AboutController::class, 'index'])->name('about.index');
-
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/about', [AboutController::class, 'index'])->name('about.index');
+    Route::post('/about', [AboutController::class, 'store'])->name('about.store');
+    Route::put('/about/{about}', [AboutController::class, 'update'])->name('about.update');
+});
 Route::get('/admin', function () {
     return Inertia::render('Admin/Dashboard');
 });
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

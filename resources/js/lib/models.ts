@@ -8,7 +8,7 @@ export interface About {
     resume_url?: string | null;
     cta_label: string;      // default: "Get in Touch"
     cta_link: string;       // default: "#contact"
-    avatar?: string | null; // optional image path
+    avatar?: File | null | string; // optional image path
     created_at: string;     // ISO date string (e.g. "2025-10-30T12:34:56Z")
     updated_at: string;
 }
