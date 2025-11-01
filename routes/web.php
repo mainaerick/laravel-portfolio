@@ -22,6 +22,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/about', [AboutController::class, 'store'])->name('about.store');
     Route::put('/about/{about}', [AboutController::class, 'update'])->name('about.update');
 });
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/project', [AboutController::class, 'index'])->name('about.index');
+    Route::post('/project', [AboutController::class, 'store'])->name('about.store');
+    Route::put('/project/{project}', [AboutController::class, 'update'])->name('about.update');
+});
+
 Route::get('/admin', function () {
     return Inertia::render('Admin/Dashboard');
 });
