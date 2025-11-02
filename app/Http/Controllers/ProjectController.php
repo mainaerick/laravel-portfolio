@@ -18,10 +18,10 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = (int) $request->get('per_page', 10);
-        $search = $request->get('q');
-        $sortBy = $request->get('sort_by', 'created_at');
-        $sortDir = $request->get('sort_dir', 'desc');
+        $perPage = 2;
+        $search = $request->get('search');
+        $sortBy = $request->get('sort', 'created_at');
+        $sortDir = $request->get('order', 'desc');
 
         $query = Project::query()->with('tags');
 
@@ -65,7 +65,6 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         $data = $request->validated();
-
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['title']);
             // ensure uniqueness
@@ -77,8 +76,8 @@ class ProjectController extends Controller
             }
         }
 
-        if ($request->hasFile('thumbnail')) {
-            $path = $request->file('thumbnail')->store('projects', 'public');
+        if ($request->hasFile('thumbnail_file')) {
+            $path = $request->file('thumbnail_file')->store('projects', 'public');
             $data['thumbnail'] = $path;
         }
 

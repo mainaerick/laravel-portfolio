@@ -34,3 +34,4 @@ export interface Skill {
     created_at: string;     // ISO date string (e.g. "2025-10-30T12:34:56Z")
     updated_at: string;
 }
+

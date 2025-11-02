@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,12 +23,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/about', [AboutController::class, 'store'])->name('about.store');
     Route::put('/about/{about}', [AboutController::class, 'update'])->name('about.update');
 });
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/project', [AboutController::class, 'index'])->name('about.index');
-    Route::post('/project', [AboutController::class, 'store'])->name('about.store');
-    Route::put('/project/{project}', [AboutController::class, 'update'])->name('about.update');
-});
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('projects', ProjectController::class);
+    Route::post('projects/bulk-destroy', [ProjectController::class, 'bulkDestroy'])->name('projects.bulk-destroy');
+});
 Route::get('/admin', function () {
     return Inertia::render('Admin/Dashboard');
 });
