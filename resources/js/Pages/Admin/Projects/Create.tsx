@@ -51,7 +51,8 @@ export default function CreateProject({ tags }: Props) {
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-        const { name, value, type, checked } = e.target;
+        const target = e.target as HTMLInputElement;
+        const { name, value, type, checked } = target;
         setData(name as keyof ProjectFormData, type === 'checkbox' ? checked : value);
     };
 
