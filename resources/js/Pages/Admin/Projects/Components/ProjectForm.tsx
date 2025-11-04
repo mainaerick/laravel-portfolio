@@ -73,7 +73,6 @@ export default function ProjectForm({
         post(submitRoute, {
             method : method === 'put' ? "put" : "post",
             forceFormData: !!data.thumbnail_file,
-
             onSuccess: () => {
                 toast.success(onSuccessMessage)
                 reset()
@@ -86,7 +85,6 @@ export default function ProjectForm({
         value: tag.id,
         label: tag.name,
     }));
-
     // Map your selected tags (Tag[]) → react-select format
     const selectedValues = data.tags
         ? data.tags.map((t: Tag) => ({ value: t.id, label: t.name }))

@@ -18,7 +18,7 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = 2;
+        $perPage = 10;
         $search = $request->get('search');
         $sortBy = $request->get('sort', 'created_at');
         $sortDir = $request->get('order', 'desc');

@@ -45,3 +45,4 @@ interface PaginatedResponse<T> {
 
 // Specific type for your project data
 export type PaginatedProjects = PaginatedResponse<Project>;
+export type PaginatedTags = PaginatedResponse<Tag>;
