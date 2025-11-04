@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Plus, MoreHorizontal, Edit, Trash2, Search } from 'lucide-react';
-import { PaginatedTags } from '@/Pages/Admin/Projects/lib/models';
+import { PaginatedTags, Tag } from '@/Pages/Admin/Projects/lib/models';
 import { useTable } from '@/lib/use-table';
 import { TablePagination } from '@/Components/Admin/TablePagination';
 import { TableSortHeader } from '@/Components/Admin/TableSortHeader';
@@ -33,10 +33,10 @@ interface Props {
     filters: any;
 }
 
-export default function TagsPage({ paginatedTags, filters }) {
+export default function TagsPage({ paginatedTags, filters }:Props) {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({ name: '', slug: '' });
-
+    console.log(paginatedTags)
 
 
     const { search, setSearch, sortField, sortOrder, handleSort, page, setPage } = useTable({
@@ -117,7 +117,7 @@ export default function TagsPage({ paginatedTags, filters }) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {paginatedTags.data.map((tag) => (
+                                {paginatedTags.data.map((tag:Tag) => (
                                     <TableRow key={tag.id} className="border-border/50 hover:bg-card/50">
                                         <TableCell className="font-medium">{tag.name}</TableCell>
                                         <TableCell className="text-muted-foreground">{tag.slug}</TableCell>
