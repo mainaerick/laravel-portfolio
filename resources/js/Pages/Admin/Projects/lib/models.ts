@@ -16,6 +16,10 @@ export interface Project {
     tags?: Tag[];
     created_at?: string;
     updated_at?: string;
+    thumbnail_file: File | null
+    _method: string
+    tag_ids?: number[]; // selected IDs for form
+
 }
 interface PaginationLink {
     url: string | null; // Can be a string URL or null

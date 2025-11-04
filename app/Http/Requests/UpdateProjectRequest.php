@@ -22,7 +22,16 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:projects,slug,' . ($this->route('project')->id ?? 'NULL'),
+            'description' => 'nullable|string',
+            'thumbnail_file' => 'nullable|image|max:2048',
+            'github' => 'nullable|url',
+            'live_url' => 'nullable|url',
+            'tag_ids' => ['nullable', 'array'],
+            'tag_ids.*' => ['required', 'integer', 'exists:tags,id'], // Enforce integer/existence
+            'is_featured' => 'nullable|boolean',
+            'order' => 'nullable|integer'
         ];
     }
 }

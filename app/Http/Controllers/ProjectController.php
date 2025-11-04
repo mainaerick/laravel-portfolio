@@ -64,7 +64,9 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
+
         $data = $request->validated();
+
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['title']);
             // ensure uniqueness
@@ -93,8 +95,8 @@ class ProjectController extends Controller
             'order' => $data['order'] ?? 0,
         ]);
 
-        if (!empty($data['tags'])) {
-            $project->tags()->sync($data['tags']);
+        if (!empty($data['tag_ids'])) {
+            $project->tags()->sync($data['tag_ids']);
         }
 
         return redirect()->route('admin.projects.index')->with('success', 'Project created.');
@@ -129,6 +131,7 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
+
         $data = $request->validated();
 
         if (empty($data['slug'])) {
@@ -141,12 +144,12 @@ class ProjectController extends Controller
             }
         }
 
-        if ($request->hasFile('thumbnail')) {
+        if ($request->hasFile('thumbnail_file')) {
             // delete old if exists
             if ($project->thumbnail && Storage::disk('public')->exists($project->thumbnail)) {
                 Storage::disk('public')->delete($project->thumbnail);
             }
-            $path = $request->file('thumbnail')->store('projects', 'public');
+            $path = $request->file('thumbnail_file')->store('projects', 'public');
             $data['thumbnail'] = $path;
         }
 
@@ -162,7 +165,7 @@ class ProjectController extends Controller
             'order' => $data['order'] ?? 0,
         ]);
 
-        $project->tags()->sync($data['tags'] ?? []);
+        $project->tags()->sync($data['tag_ids'] ?? []);
 
         return redirect()->route('admin.projects.index')->with('success', 'Project updated.');
     }

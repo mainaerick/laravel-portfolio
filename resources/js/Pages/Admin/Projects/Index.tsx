@@ -15,9 +15,9 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { TablePagination } from '@/Components/Admin/TablePagination';
 import { TableSortHeader } from '@/Components/Admin/TableSortHeader';
 import { useTable } from '@/lib/use-table';
-import { Link } from '@inertiajs/react';
-import { PaginatedProjects, Tag } from '@/Pages/Admin/Projects/lib/models';
-
+import { Link, router } from '@inertiajs/react';
+import { PaginatedProjects, Project, Tag } from '@/Pages/Admin/Projects/lib/models';
+import Swal from 'sweetalert2'
 
 
 interface Props {
@@ -35,6 +35,33 @@ export default function ProjectsPage({projects, filters, tags }:Props) {
         baseUrl: '/admin/projects',
     });
 
+    const deleteProject = (project:Project)=>{
+        Swal.fire({
+            title: "Do you want to delete the project?",
+            showCancelButton: true,
+            confirmButtonText: "Delete",
+            denyButtonText: `Cancel`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                router.delete(`/admin/projects/${project.id}`, {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        Swal.fire({
+                            icon: "success",
+                            title: `${project.title} deleted successfully!`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    },
+                    onError: (errors) => {
+                        // Optional: Display error toast/notification here
+                        console.error('Delete failed:', errors);
+                    }
+                });
+            }
+        });
+    }
     return (
         <AdminLayout>
             <div className="p-6 space-y-6">
@@ -128,9 +155,10 @@ export default function ProjectsPage({projects, filters, tags }:Props) {
                                                 <DropdownMenuContent align="end">
                                                     <DropdownMenuItem>
                                                         <Edit className="mr-2 h-4 w-4" />
-                                                        Edit
+                                                        <a href={`projects/${project.id}/edit`}> Edit </a>
+
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem className="text-destructive">
+                                                    <DropdownMenuItem className="text-destructive" onClick={()=>deleteProject(project)}>
                                                         <Trash2 className="mr-2 h-4 w-4" />
                                                         Delete
                                                     </DropdownMenuItem>

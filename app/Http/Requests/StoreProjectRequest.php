@@ -28,8 +28,8 @@ class StoreProjectRequest extends FormRequest
             'thumbnail' => 'nullable|image|max:2048',
             'github' => 'nullable|url',
             'live_url' => 'nullable|url',
-            'tags' => 'nullable|array',
-            'tags.*' => 'string|max:50',
+            'tag_ids' => ['nullable', 'array'],
+            'tag_ids.*' => ['required', 'integer', 'exists:tags,id'], // Enforce integer/existence
             'is_featured' => 'nullable|boolean',
             'order' => 'nullable|integer'
         ];
