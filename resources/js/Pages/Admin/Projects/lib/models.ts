@@ -1,3 +1,5 @@
+import { Skill } from '@/lib/models';
+
 export interface Tag {
     id: number;
     name: string;
@@ -47,3 +49,4 @@ interface PaginatedResponse<T> {
 // Specific type for your project data
 export type PaginatedProjects = PaginatedResponse<Project>;
 export type PaginatedTags = PaginatedResponse<Tag>;
+export type PaginatedSkills = PaginatedResponse<Skill>;

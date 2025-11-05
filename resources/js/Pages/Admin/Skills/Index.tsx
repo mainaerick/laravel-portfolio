@@ -17,7 +17,7 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import SkillForm from '@/Pages/Admin/Skills/Components/SkillForm';
 import { Skill } from '@/lib/models';
 import { SkillIcon } from '@/Pages/Admin/Skills/Components/SkillIcon';
-import { Tag } from '@/Pages/Admin/Projects/lib/models';
+import { PaginatedSkills, Tag } from '@/Pages/Admin/Projects/lib/models';
 import { confirmDelete } from '@/Components/Admin/ConfirmDelete';
 const skills = [
     { id: 1, name: "React", icon: "⚛️", order: 1 },
@@ -25,7 +25,11 @@ const skills = [
     { id: 3, name: "Node.js", icon: "🟢", order: 3 },
 ]
 
-export default function SkillsPage({paginatedSkills,filters}) {
+interface Props {
+    paginatedSkills:PaginatedSkills
+    filters: any;
+}
+export default function SkillsPage({paginatedSkills,filters}:Props) {
     const [open, setOpen] = useState(false)
     const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
 
