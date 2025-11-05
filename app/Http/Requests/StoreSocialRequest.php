@@ -22,8 +22,10 @@ class StoreSocialRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'provider' => 'required|string|max:255',
-            'url' => 'required|string|max:255',
+            'provider' => ['required', 'string', 'max:255'],
+            'url' => ['required', 'url', 'max:255'],
+            'label' => ['nullable', 'string', 'max:255'],
+            'order' => ['nullable', 'integer', 'min:0'],
         ];
     }
 }

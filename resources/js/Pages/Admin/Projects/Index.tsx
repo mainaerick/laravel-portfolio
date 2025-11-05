@@ -1,4 +1,3 @@
-'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,9 +14,8 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { TablePagination } from '@/Components/Admin/TablePagination';
 import { TableSortHeader } from '@/Components/Admin/TableSortHeader';
 import { useTable } from '@/lib/use-table';
-import { Link, router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { PaginatedProjects, Project, Tag } from '@/Pages/Admin/Projects/lib/models';
-import Swal from 'sweetalert2'
 import { confirmDelete } from '@/Components/Admin/ConfirmDelete';
 
 

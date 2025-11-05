@@ -3,27 +3,24 @@ import { useForm } from "@inertiajs/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
+import { Social } from '@/lib/models';
 
-interface SkillFormProps {
+interface SocialFormProps {
     method?: "post" | "put";
-    initialData?: {
-        id?: number;
-        name?: string;
-        icon?: string;
-        order?: number;
-    };
+    initialData?: Social;
     onSuccess?: () => void;
 }
 
-export default function SkillForm({
-                                      method = "post",
-                                      initialData,
-                                      onSuccess,
-                                  }: SkillFormProps) {
+export function SocialForm({
+                               method = "post",
+                               initialData,
+                               onSuccess,
+                           }: SocialFormProps) {
     const { data, setData, post, put, processing, errors, reset } = useForm({
         _method: method === "put" ? "PUT" : "POST",
-        name: initialData?.name || "",
-        icon: initialData?.icon || "",
+        provider: initialData?.provider || "",
+        url: initialData?.url || "",
+        label: initialData?.label || "",
         order: initialData?.order || 0,
     });
 
@@ -36,14 +33,14 @@ export default function SkillForm({
         e.preventDefault();
 
         if (method === "put" && initialData?.id) {
-            put(route("admin.skills.update", initialData.id), {
+            put(route("admin.socials.update", initialData.id), {
                 onSuccess: () => {
                     reset();
                     onSuccess?.();
                 },
             });
         } else {
-            post(route("admin.skills.store"), {
+            post(route("admin.socials.store"), {
                 onSuccess: () => {
                     reset();
                     onSuccess?.();
@@ -54,30 +51,43 @@ export default function SkillForm({
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Skill Name */}
+            {/* Provider */}
             <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Name</label>
+                <label className="text-sm font-medium text-foreground">Provider</label>
                 <Input
-                    name="name"
-                    value={data.name}
+                    name="provider"
+                    value={data.provider}
                     onChange={handleChange}
-                    placeholder="Skill name"
+                    placeholder="GitHub, Twitter, LinkedIn..."
                     className="bg-input border-border/50"
                 />
-                {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+                {errors.provider && <p className="text-red-500 text-sm">{errors.provider}</p>}
             </div>
 
-            {/* Skill Icon */}
+            {/* URL */}
             <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Icon (emoji)</label>
+                <label className="text-sm font-medium text-foreground">URL</label>
                 <Input
-                    name="icon"
-                    value={data.icon}
+                    name="url"
+                    value={data.url}
                     onChange={handleChange}
-                    placeholder="⚛️"
+                    placeholder="https://example.com"
                     className="bg-input border-border/50"
                 />
-                {errors.icon && <p className="text-red-500 text-sm">{errors.icon}</p>}
+                {errors.url && <p className="text-red-500 text-sm">{errors.url}</p>}
+            </div>
+
+            {/* Label */}
+            <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">Label (optional)</label>
+                <Input
+                    name="label"
+                    value={data.label}
+                    onChange={handleChange}
+                    placeholder="e.g. personal, work"
+                    className="bg-input border-border/50"
+                />
+                {errors.label && <p className="text-red-500 text-sm">{errors.label}</p>}
             </div>
 
             {/* Order */}
@@ -97,20 +107,17 @@ export default function SkillForm({
             <Button
                 type="submit"
                 disabled={processing}
-                className="bg-gradient-to-r from-neon-purple to-neon-blue text-white"
+                className="w-full bg-gradient-to-r from-neon-purple to-neon-blue text-white"
             >
                 <Save className="mr-2 h-4 w-4" />
                 {processing
-                    ? editingLabel(method as 'put'|'post')
+                    ? method === "put"
+                        ? "Updating..."
+                        : "Saving..."
                     : method === "put"
-                        ? "Update Skill"
-                        : "Add Skill"}
+                        ? "Update Social"
+                        : "Add Social"}
             </Button>
         </form>
     );
-}
-
-// Helper for button text during processing
-function editingLabel(method: "post" | "put") {
-    return method === "put" ? "Updating..." : "Saving...";
 }

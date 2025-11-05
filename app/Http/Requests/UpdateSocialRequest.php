@@ -22,7 +22,10 @@ class UpdateSocialRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'provider' => ['sometimes', 'string', 'max:255'],
+            'url' => ['sometimes', 'url', 'max:255'],
+            'label' => ['nullable', 'string', 'max:255'],
+            'order' => ['nullable', 'integer', 'min:0'],
         ];
     }
 }
