@@ -43,6 +43,8 @@ import { TablePagination } from "@/Components/Admin/TablePagination";
 import { TableSortHeader } from "@/Components/Admin/TableSortHeader";
 import AdminLayout from "@/Layouts/AdminLayout";
 import TagForm from "@/Pages/Admin/Tags/Components/TagForm";
+import Swal from 'sweetalert2';
+import { router } from '@inertiajs/react';
 
 interface Props {
     paginatedTags: PaginatedTags;
@@ -70,6 +72,33 @@ export default function TagsPage({ paginatedTags, filters }: Props) {
         setEditingTag(tag);
         setOpen(true);
     };
+    const handleDelete = (tag:Tag)=>{
+        Swal.fire({
+            title: "Do you want to delete the tag?",
+            showCancelButton: true,
+            confirmButtonText: "Delete",
+            denyButtonText: `Cancel`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                router.delete(route("admin.tags.destroy", tag.id), {
+                    preserveScroll: true,
+                    onSuccess: () => {
+                        Swal.fire({
+                            icon: "success",
+                            title: `${tag.name} deleted successfully!`,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    },
+                    onError: (errors) => {
+                        // Optional: Display error toast/notification here
+                        console.error('Delete failed:', errors);
+                    }
+                });
+            }
+        });
+    }
     return (
         <AdminLayout>
             <div className="p-6 space-y-6">
@@ -172,7 +201,7 @@ export default function TagsPage({ paginatedTags, filters }: Props) {
                                                         <Edit className="mr-2 h-4 w-4" />
                                                         Edit
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem className="text-destructive">
+                                                    <DropdownMenuItem className="text-destructive" onClick={()=>handleDelete(tag)}>
                                                         <Trash2 className="mr-2 h-4 w-4" />
                                                         Delete
                                                     </DropdownMenuItem>
