@@ -42,19 +42,20 @@ class DatabaseSeeder extends Seeder
         ]);
         // SKILLS
         $skills = [
-            ['name' => 'React', 'icon' => 'logos:react', 'order' => 1],
-            ['name' => 'TypeScript', 'icon' => 'logos:typescript-icon', 'order' => 2],
-            ['name' => 'Laravel', 'icon' => 'logos:laravel', 'order' => 3],
-            ['name' => 'Tailwind CSS', 'icon' => 'logos:tailwindcss-icon', 'order' => 4],
-            ['name' => 'Node.js', 'icon' => 'logos:nodejs-icon', 'order' => 5],
-            ['name' => 'MySQL', 'icon' => 'logos:mysql-icon', 'order' => 6],
-            ['name' => 'Firebase', 'icon' => 'logos:firebase', 'order' => 7],
+            ['name' => 'React', 'icon' => 'react', 'order' => 1],
+            ['name' => 'TypeScript', 'icon' => 'typescript-icon', 'order' => 2],
+            ['name' => 'Laravel', 'icon' => 'laravel', 'order' => 3],
+            ['name' => 'Tailwind CSS', 'icon' => 'tailwindcss-icon', 'order' => 4],
+            ['name' => 'Node.js', 'icon' => 'nodejs-icon', 'order' => 5],
+            ['name' => 'MySQL', 'icon' => 'mysql-icon', 'order' => 6],
+            ['name' => 'Firebase', 'icon' => 'firebase', 'order' => 7],
+            ['name' => 'Java', 'icon' => 'java', 'order' => 8],
         ];
         DB::table('skills')->insert($skills);
 
         // TAGS
         $tags = collect([
-            'React', 'Laravel', 'Tailwind', 'Fullstack', 'API', 'UI/UX', 'Open Source','Firebase'
+            'React', 'Laravel', 'Tailwind', 'Fullstack', 'API', 'UI/UX', 'Open Source','Firebase','Java'
         ])->map(fn($name) => [
             'name' => $name,
             'slug' => Str::slug($name),

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSkillRequest extends FormRequest
 {
@@ -22,7 +23,14 @@ class UpdateSkillRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('skills', 'name')->ignore($this->skill),
+            ],
+            'icon' => 'nullable|string|max:255',
+            'order' => 'nullable|integer|min:0',
         ];
     }
 }
