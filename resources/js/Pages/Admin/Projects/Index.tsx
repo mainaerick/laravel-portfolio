@@ -18,6 +18,7 @@ import { useTable } from '@/lib/use-table';
 import { Link, router } from '@inertiajs/react';
 import { PaginatedProjects, Project, Tag } from '@/Pages/Admin/Projects/lib/models';
 import Swal from 'sweetalert2'
+import { confirmDelete } from '@/Components/Admin/ConfirmDelete';
 
 
 interface Props {
@@ -36,31 +37,9 @@ export default function ProjectsPage({projects, filters, tags }:Props) {
     });
 
     const deleteProject = (project:Project)=>{
-        Swal.fire({
-            title: "Do you want to delete the project?",
-            showCancelButton: true,
-            confirmButtonText: "Delete",
-            denyButtonText: `Cancel`
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                router.delete(`/admin/projects/${project.id}`, {
-                    preserveScroll: true,
-                    onSuccess: () => {
-                        Swal.fire({
-                            icon: "success",
-                            title: `${project.title} deleted successfully!`,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    },
-                    onError: (errors) => {
-                        // Optional: Display error toast/notification here
-                        console.error('Delete failed:', errors);
-                    }
-                });
-            }
-        });
+
+        confirmDelete("admin.projects.destroy", project.id, project.title);
+
     }
     return (
         <AdminLayout>

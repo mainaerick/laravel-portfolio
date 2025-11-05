@@ -17,7 +17,7 @@ class TagController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = 10;
+        $perPage = $request->get('per_page', 10);
         $search = $request->get('search');
         $sortBy = $request->get('sort', 'created_at');
         $sortDir = $request->get('order', 'desc');

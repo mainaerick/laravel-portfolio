@@ -45,13 +45,14 @@ import AdminLayout from "@/Layouts/AdminLayout";
 import TagForm from "@/Pages/Admin/Tags/Components/TagForm";
 import Swal from 'sweetalert2';
 import { router } from '@inertiajs/react';
+import { confirmDelete } from '@/Components/Admin/ConfirmDelete';
 
 interface Props {
     paginatedTags: PaginatedTags;
     filters: any;
 }
 
-export default function TagsPage({ paginatedTags, filters }: Props) {
+export default function Index({ paginatedTags, filters }: Props) {
     const [open, setOpen] = useState(false);
     const [editingTag, setEditingTag] = useState<Tag | null>(null);
 
@@ -73,31 +74,8 @@ export default function TagsPage({ paginatedTags, filters }: Props) {
         setOpen(true);
     };
     const handleDelete = (tag:Tag)=>{
-        Swal.fire({
-            title: "Do you want to delete the tag?",
-            showCancelButton: true,
-            confirmButtonText: "Delete",
-            denyButtonText: `Cancel`
-        }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-                router.delete(route("admin.tags.destroy", tag.id), {
-                    preserveScroll: true,
-                    onSuccess: () => {
-                        Swal.fire({
-                            icon: "success",
-                            title: `${tag.name} deleted successfully!`,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    },
-                    onError: (errors) => {
-                        // Optional: Display error toast/notification here
-                        console.error('Delete failed:', errors);
-                    }
-                });
-            }
-        });
+
+        confirmDelete("admin.tags.destroy", tag.id, tag.name);
     }
     return (
         <AdminLayout>
