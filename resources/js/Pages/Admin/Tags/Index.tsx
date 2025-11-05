@@ -1,56 +1,75 @@
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useState } from "react";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 import {
     Dialog,
     DialogContent,
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger
-} from '@/components/ui/dialog';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Plus, MoreHorizontal, Edit, Trash2, Search } from 'lucide-react';
-import { PaginatedTags, Tag } from '@/Pages/Admin/Projects/lib/models';
-import { useTable } from '@/lib/use-table';
-import { TablePagination } from '@/Components/Admin/TablePagination';
-import { TableSortHeader } from '@/Components/Admin/TableSortHeader';
-import AdminLayout from '@/Layouts/AdminLayout';
-import TagForm from '@/Pages/Admin/Tags/Components/TagForm';
-
-const tags = [
-    { id: 1, name: 'React', slug: 'react' },
-    { id: 2, name: 'TypeScript', slug: 'typescript' },
-    { id: 3, name: 'Node.js', slug: 'nodejs' },
-    { id: 4, name: 'Python', slug: 'python' },
-    { id: 5, name: 'GraphQL', slug: 'graphql' }
-];
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    Plus,
+    MoreHorizontal,
+    Edit,
+    Trash2,
+    Search,
+} from "lucide-react";
+import { PaginatedTags, Tag } from "@/Pages/Admin/Projects/lib/models";
+import { useTable } from "@/lib/use-table";
+import { TablePagination } from "@/Components/Admin/TablePagination";
+import { TableSortHeader } from "@/Components/Admin/TableSortHeader";
+import AdminLayout from "@/Layouts/AdminLayout";
+import TagForm from "@/Pages/Admin/Tags/Components/TagForm";
 
 interface Props {
     paginatedTags: PaginatedTags;
     filters: any;
 }
 
-export default function TagsPage({ paginatedTags, filters }:Props) {
+export default function TagsPage({ paginatedTags, filters }: Props) {
     const [open, setOpen] = useState(false);
-    const [formData, setFormData] = useState({ name: '', slug: '' });
-    console.log(paginatedTags)
+    const [editingTag, setEditingTag] = useState<Tag | null>(null);
 
+    const { search, setSearch, sortField, sortOrder, handleSort, page, setPage } =
+        useTable({
+            initialSortField: filters.sort_by ?? "title",
+            initialSortOrder: filters.order ?? "asc",
+            perPage: paginatedTags.per_page,
+            filters,
+            baseUrl: "/admin/tags",
+        });
 
-    const { search, setSearch, sortField, sortOrder, handleSort, page, setPage } = useTable({
-        initialSortField: filters.sort_by ?? 'title',
-        initialSortOrder: filters.order ?? 'asc',
-        perPage: paginatedTags.per_page,
-        filters,
-        baseUrl: '/admin/tags'
-    });
-    const handleAddTag = () => {
-        setOpen(false);
-        setFormData({ name: '', slug: '' });
+    const handleAddNew = () => {
+        setEditingTag(null);
+        setOpen(true);
     };
-
+    const handleEdit = (tag: Tag) => {
+        setEditingTag(tag);
+        setOpen(true);
+    };
     return (
         <AdminLayout>
             <div className="p-6 space-y-6">
@@ -59,19 +78,34 @@ export default function TagsPage({ paginatedTags, filters }:Props) {
                         <h1 className="text-3xl font-bold text-foreground">Tags</h1>
                         <p className="text-muted-foreground">Manage project tags</p>
                     </div>
+
                     <Dialog open={open} onOpenChange={setOpen}>
                         <DialogTrigger asChild>
-                            <Button className="bg-neon-purple hover:bg-neon-purple/90 text-white">
+                            <Button
+                                onClick={handleAddNew}
+                                className="bg-neon-purple hover:bg-neon-purple/90 text-white"
+                            >
                                 <Plus className="mr-2 h-4 w-4" />
                                 Add Tag
                             </Button>
                         </DialogTrigger>
+
                         <DialogContent className="bg-card border-border/50">
                             <DialogHeader>
-                                <DialogTitle>Add New Tag</DialogTitle>
-                                <DialogDescription>Create a new tag for your projects</DialogDescription>
+                                <DialogTitle>
+                                    {editingTag ? "Edit Tag" : "Add New Tag"}
+                                </DialogTitle>
+                                <DialogDescription>
+                                    {editingTag
+                                        ? "Update tag details below."
+                                        : "Create a new tag for your projects."}
+                                </DialogDescription>
                             </DialogHeader>
-                            <TagForm/>
+
+                            <TagForm
+                                method={editingTag ? "put" : "post"}
+                                initialData={editingTag ?? undefined}
+                            />
                         </DialogContent>
                     </Dialog>
                 </div>
@@ -99,28 +133,33 @@ export default function TagsPage({ paginatedTags, filters }:Props) {
                                         <TableSortHeader
                                             label="Name"
                                             sortable
-                                            isSorted={sortField === 'name'}
+                                            isSorted={sortField === "name"}
                                             sortOrder={sortOrder}
-                                            onClick={() => handleSort('name')}
+                                            onClick={() => handleSort("name")}
                                         />
                                     </TableHead>
                                     <TableHead>
                                         <TableSortHeader
                                             label="Slug"
                                             sortable
-                                            isSorted={sortField === 'slug'}
+                                            isSorted={sortField === "slug"}
                                             sortOrder={sortOrder}
-                                            onClick={() => handleSort('slug')}
+                                            onClick={() => handleSort("slug")}
                                         />
                                     </TableHead>
                                     <TableHead className="text-right">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {paginatedTags.data.map((tag:Tag) => (
-                                    <TableRow key={tag.id} className="border-border/50 hover:bg-card/50">
+                                {paginatedTags.data.map((tag: Tag) => (
+                                    <TableRow
+                                        key={tag.id}
+                                        className="border-border/50 hover:bg-card/50"
+                                    >
                                         <TableCell className="font-medium">{tag.name}</TableCell>
-                                        <TableCell className="text-muted-foreground">{tag.slug}</TableCell>
+                                        <TableCell className="text-muted-foreground">
+                                            {tag.slug}
+                                        </TableCell>
                                         <TableCell className="text-right">
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
@@ -129,7 +168,7 @@ export default function TagsPage({ paginatedTags, filters }:Props) {
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end">
-                                                    <DropdownMenuItem>
+                                                    <DropdownMenuItem onClick={() => handleEdit(tag)}>
                                                         <Edit className="mr-2 h-4 w-4" />
                                                         Edit
                                                     </DropdownMenuItem>
@@ -151,7 +190,6 @@ export default function TagsPage({ paginatedTags, filters }:Props) {
                             onPageChange={setPage}
                             itemsPerPage={paginatedTags.per_page}
                             totalItems={paginatedTags.total}
-
                         />
                     </CardContent>
                 </Card>

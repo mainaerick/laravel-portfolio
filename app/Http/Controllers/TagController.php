@@ -83,7 +83,9 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        //
+        return Inertia::render('Tags/Edit', [
+            'tag' => $tag,
+        ]);
     }
 
     /**
@@ -91,7 +93,16 @@ class TagController extends Controller
      */
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:tags,name,' . $tag->id,
+        ]);
+
+        $tag->update([
+            'name' => $validated['name'],
+            'slug' => Str::slug($validated['name']),
+        ]);
+
+        return redirect()->route('admin.tags.index')->with('success', 'Tag updated successfully.');
     }
 
     /**

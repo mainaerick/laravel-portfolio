@@ -29,7 +29,7 @@ export default function TagForm({ method = "post", initialData }: TagFormProps) 
         e.preventDefault();
 
         if (method === "put" && initialData?.id) {
-            put(route("tags.update", initialData.id));
+            put(route("admin.tags.update", initialData.id));
         } else {
             post(route("admin.tags.store"), {
                 onSuccess: () => reset(),
