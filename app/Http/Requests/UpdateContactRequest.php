@@ -20,11 +20,9 @@ class UpdateContactRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules() {
+
         return [
-            'name' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'subject' => 'nullable|string|max:255',
-            'message' => 'required|string|min:10',
+            'is_read' => 'boolean',
         ];
     }
 }

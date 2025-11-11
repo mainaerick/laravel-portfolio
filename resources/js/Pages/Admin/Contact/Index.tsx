@@ -13,48 +13,6 @@ import { TablePagination } from '@/Components/Admin/TablePagination';
 import { TableSortHeader } from '@/Components/Admin/TableSortHeader';
 import AdminLayout from '@/Layouts/AdminLayout';
 
-const messages = [
-    {
-        id: 1,
-        name: 'John Smith',
-        email: 'john@example.com',
-        subject: 'Project Inquiry',
-        isRead: false,
-        createdAt: '2024-01-15'
-    },
-    {
-        id: 2,
-        name: 'Jane Doe',
-        email: 'jane@example.com',
-        subject: 'Collaboration',
-        isRead: true,
-        createdAt: '2024-01-14'
-    },
-    {
-        id: 3,
-        name: 'Bob Wilson',
-        email: 'bob@example.com',
-        subject: 'Feedback',
-        isRead: false,
-        createdAt: '2024-01-13'
-    },
-    {
-        id: 4,
-        name: 'Alice Brown',
-        email: 'alice@example.com',
-        subject: 'Support',
-        isRead: true,
-        createdAt: '2024-01-12'
-    },
-    {
-        id: 5,
-        name: 'Charlie Davis',
-        email: 'charlie@example.com',
-        subject: 'Question',
-        isRead: false,
-        createdAt: '2024-01-11'
-    }
-];
 
 interface Props {
     paginatedMessages: PaginatedMessages;
@@ -77,6 +35,7 @@ export default function ContactsPage({ paginatedMessages, filters }: Props) {
 
     const handleViewMessage = (message: Message) => {
         setSelectedMessage(message);
+        console.log(message)
         setSheetOpen(true);
     };
 
@@ -222,9 +181,7 @@ export default function ContactsPage({ paginatedMessages, filters }: Props) {
                                 <div>
                                     <p className="text-sm text-muted-foreground">Message</p>
                                     <p className="mt-2 text-sm">
-                                        This is a sample message content. In a real application, this would display the
-                                        full message body from
-                                        the contact form submission.
+                                        {selectedMessage.message}
                                     </p>
                                 </div>
                                 <Button className="w-full bg-neon-purple hover:bg-neon-purple/90 text-white">Reply via
