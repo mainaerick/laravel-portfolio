@@ -1,13 +1,14 @@
 <?php
 
 use App\Http\Controllers\AboutController;
-use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\Public\ContactFormController;
+use App\Http\Controllers\Public\PortfolioController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\TagController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -42,6 +43,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('socials', SocialController::class);
     Route::post('socials/bulk-destroy', [SocialController::class, 'bulkDestroy'])->name('socials.bulk-destroy');
+});
+Route::post('/contact', [ContactFormController::class, 'store'])->name('contact.store');
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('contacts', ContactController::class);
+    Route::post('contacts/bulk-destroy', [ContactController::class, 'bulkDestroy'])->name('contacts.bulk-destroy');
 });
 Route::get('/admin', function () {
     return Inertia::render('Admin/Dashboard');

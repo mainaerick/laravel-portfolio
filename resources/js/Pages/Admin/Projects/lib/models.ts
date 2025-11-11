@@ -30,7 +30,7 @@ interface PaginationLink {
     page: number | null; // Can be a number or null
     active: boolean;
 }
-interface PaginatedResponse<T> {
+export interface PaginatedResponse<T> {
     current_page: number;
     data: T[];
     first_page_url: string;

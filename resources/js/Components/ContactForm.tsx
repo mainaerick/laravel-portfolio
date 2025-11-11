@@ -1,22 +1,24 @@
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from 'react';
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { useForm } from '@inertiajs/react';
 
 export default function ContactForm() {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        message: "",
-    })
+    const { data, setData, post, processing, errors, reset } = useForm({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+    });
     const [submitted, setSubmitted] = useState(false)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
-        setFormData((prev) => ({
+        setData((prev) => ({
             ...prev,
             [name]: value,
         }))
@@ -25,14 +27,28 @@ export default function ContactForm() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
         // Handle form submission here
-        console.log("Form submitted:", formData)
-        setSubmitted(true)
-        setTimeout(() => {
-            setFormData({ name: "", email: "", message: "" })
-            setSubmitted(false)
-        }, 3000)
+        post(route('contact.store'), {
+            onSuccess: () => {
+                reset();
+            },
+            onProgress:()=>{
+                setSubmitted(true)
+            },
+            onFinish:()=>{
+                setSubmitted(false)
+            },
+        });
+
+
+        // setTimeout(() => {
+        //     setData({ name: "", email: "", message: "" })
+        //     setSubmitted(false)
+        // }, 3000)
     }
 
+    useEffect(() => {
+        console.log(errors)
+    }, [errors]);
     return (
         <motion.form
             onSubmit={handleSubmit}
@@ -50,7 +66,7 @@ export default function ContactForm() {
                     id="name"
                     name="name"
                     type="text"
-                    value={formData.name}
+                    value={data.name}
                     onChange={handleChange}
                     placeholder="Your name"
                     required
@@ -66,7 +82,7 @@ export default function ContactForm() {
                     id="email"
                     name="email"
                     type="email"
-                    value={formData.email}
+                    value={data.email}
                     onChange={handleChange}
                     placeholder="your@email.com"
                     required
@@ -81,7 +97,7 @@ export default function ContactForm() {
                 <Textarea
                     id="message"
                     name="message"
-                    value={formData.message}
+                    value={data.message}
                     onChange={handleChange}
                     placeholder="Tell me about your project..."
                     required
