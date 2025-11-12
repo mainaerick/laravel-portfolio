@@ -1,20 +1,23 @@
-@component('mail::message')
+<x-mail::message>
     # New Contact Message
 
-    You have received a new message from your website contact form.
+    You’ve received a new contact message from your website.
+
+    ---
 
     **Name:** {{ $contact->name ?? 'N/A' }}
     **Email:** {{ $contact->email ?? 'N/A' }}
     **Subject:** {{ $contact->subject ?? 'N/A' }}
-    **Message:**
-    {{ $contact->message }}
 
     ---
 
-    @component('mail::button', ['url' => url('/admin/contacts')])
-        View in Dashboard
-    @endcomponent
+    **Message:**
+    > {{ $contact->message ?? 'N/A' }}
 
-    Thanks,
+    <x-mail::button :url="$url">
+        View Message
+    </x-mail::button>
+
+    Thanks,<br>
     {{ config('app.name') }}
-@endcomponent
+</x-mail::message>

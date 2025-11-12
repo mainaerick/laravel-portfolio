@@ -26,9 +26,10 @@ class NewContactMessageMail extends Mailable
      */
     public function build(): self
     {
-        return $this->subject('📩 New Contact Message Received')
+        return $this->subject('New Contact Message Received')
             ->markdown('emails.contacts.new', [
                 'contact' => $this->contact,
+                'url' => url('/admin/contacts/' . $this->contact->id),
             ]);
     }
 }
