@@ -8,15 +8,20 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { LogOut, Settings } from "lucide-react"
+import { router, usePage } from '@inertiajs/react';
 
 export function AdminNavbar() {
     const pathname = "admin/about"
-
+    const { props } = usePage();
+    const user = props.auth?.user;
     const getPageTitle = () => {
         const segments = pathname.split("/").filter(Boolean)
         if (segments.length === 1) return "Dashboard"
         return segments[segments.length - 1].charAt(0).toUpperCase() + segments[segments.length - 1].slice(1)
     }
+    const handleLogout = () => {
+        router.post(route("logout"));
+    };
 
     return (
         <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6">
@@ -37,8 +42,8 @@ export function AdminNavbar() {
                     <DropdownMenuContent align="end" className="w-56">
                         <div className="flex items-center justify-start gap-2 p-2">
                             <div className="flex flex-col space-y-1 leading-none">
-                                <p className="font-medium">Admin User</p>
-                                <p className="text-xs text-muted-foreground">admin@example.com</p>
+                                <p className="font-medium">{user?.name}</p>
+                                <p className="text-xs text-muted-foreground">{user?.email}</p>
                             </div>
                         </div>
                         <DropdownMenuSeparator />
@@ -46,7 +51,7 @@ export function AdminNavbar() {
                             <Settings className="mr-2 h-4 w-4" />
                             <span>Settings</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem onClick={()=>handleLogout()}>
                             <LogOut className="mr-2 h-4 w-4" />
                             <span>Logout</span>
                         </DropdownMenuItem>

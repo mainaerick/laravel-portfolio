@@ -36,7 +36,7 @@ export default function HeroSection({socialLinks,about}:Props) {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center pt-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <section className="min-h-screen flex items-center justify-center pt-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" id="hero">
             {/* Gradient background elements */}
             <div className="absolute inset-0 -z-10">
                 <div className="absolute top-20 left-10 w-72 h-72 bg-neon-purple/20 rounded-full blur-3xl opacity-20" />
@@ -86,7 +86,7 @@ export default function HeroSection({socialLinks,about}:Props) {
                             asChild
                         >
                             <a
-                                href={`/storage/${about.resume_url}`}
+                                href={`${about.resume_url}`}
                                 download
                                 target="_blank"
                                 rel="noopener noreferrer"
@@ -130,6 +130,6 @@ export default function HeroSection({socialLinks,about}:Props) {
                     />
                 </div>
             </motion.div>
-        </div>
+        </section>
     )
 }

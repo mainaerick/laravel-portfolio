@@ -53,7 +53,7 @@ export function SocialForm({
         <form onSubmit={handleSubmit} className="space-y-4">
             {/* Provider */}
             <div className="space-y-2">
-                <label className="text-sm font-medium text-foreground">Provider</label>
+                <label className="text-sm font-medium text-foreground">Provider <small>*hint lucide-react Icon component</small></label>
                 <Input
                     name="provider"
                     value={data.provider}

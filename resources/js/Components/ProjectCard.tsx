@@ -1,19 +1,14 @@
 import { motion } from "framer-motion"
 import { Github, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Project } from '@/Pages/Admin/Projects/lib/models';
 
 interface ProjectCardProps {
-    project: {
-        id: number
-        title: string
-        description: string
-        image: string
-        tags: string[]
-        github: string
-    }
+    project: Project
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+    console.log(project.tags)
     return (
         <motion.div
             whileHover={{ y: -8 }}
@@ -22,7 +17,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             {/* Image container */}
             <div className="relative h-48 overflow-hidden bg-gradient-to-br from-neon-purple/10 to-neon-blue/10">
                 <img
-                    src={project.image || "/placeholder.svg"}
+                    src={project.thumbnail || "/placeholder.svg"}
                     alt={project.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
@@ -34,7 +29,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                             className="border-neon-purple/30 hover:bg-neon-purple/20 bg-transparent"
                             asChild
                         >
-                            <a href={project.github} target="_blank" rel="noopener noreferrer">
+                            <a href={project.github as string} target="_blank" rel="noopener noreferrer">
                                 <Github className="w-4 h-4 mr-2" />
                                 Code
                             </a>
@@ -44,7 +39,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                             className="bg-gradient-to-r from-neon-purple to-neon-blue hover:from-neon-purple/80 hover:to-neon-blue/80 text-white border-0"
                             asChild
                         >
-                            <a href="#" target="_blank" rel="noopener noreferrer">
+                            <a href={project.live_url as string} target="_blank" rel="noopener noreferrer">
                                 <ExternalLink className="w-4 h-4 mr-2" />
                                 Live
                             </a>
@@ -62,12 +57,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 pt-2">
-                    {project.tags.map((tag) => (
+                    {project.tags?.map((tag) => (
                         <span
-                            key={tag}
+                            key={tag.id}
                             className="px-3 py-1 text-xs font-medium rounded-full bg-neon-purple/10 border border-neon-purple/30 text-neon-purple"
                         >
-              {tag}
+              {tag.name}
             </span>
                     ))}
                 </div>

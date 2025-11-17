@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -98,6 +99,7 @@ class ProjectController extends Controller
         if (!empty($data['tag_ids'])) {
             $project->tags()->sync($data['tag_ids']);
         }
+        Cache::forget('portfolio.projects'); // Clear the cached data
 
         return redirect()->route('admin.projects.index')->with('success', 'Project created.');
     }
@@ -150,7 +152,7 @@ class ProjectController extends Controller
                 Storage::disk('public')->delete($project->thumbnail);
             }
             $path = $request->file('thumbnail_file')->store('projects', 'public');
-            $data['thumbnail'] = $path;
+            $data['thumbnail'] = "/storage/".$path;
         }
 
         $project->update([
@@ -166,6 +168,7 @@ class ProjectController extends Controller
         ]);
 
         $project->tags()->sync($data['tag_ids'] ?? []);
+        Cache::forget('portfolio.projects'); // Clear the cached data
 
         return redirect()->route('admin.projects.index')->with('success', 'Project updated.');
     }

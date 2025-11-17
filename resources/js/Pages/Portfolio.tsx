@@ -6,20 +6,22 @@ import ProjectsSection from '@/Components/Sections/ProjectsSection';
 import ContactSection from '@/Components/Sections/ContactSection';
 import Footer from '@/Components/Sections/Footer';
 import { About, Skill, Social } from '@/lib/models';
+import { Project } from '@/Pages/Admin/Projects/lib/models';
 
 interface Props{
+    projects:Project[]
     about:About
     socials:Social[]
     skills:Skill[]
 }
-function Portfolio({about,socials,skills}:Props) {
+function Portfolio({projects,about,socials,skills}:Props) {
     return (
         <div className="min-h-screen bg-background text-foreground">
-            <Navbar  activeSection={'home'}/>
+            <Navbar  />
             <HeroSection about={about} socialLinks={socials}/>
             <AboutSection  about={about} skills={skills}/>
-            <ProjectsSection />
-            <ContactSection />
+            <ProjectsSection  projects={projects}/>
+            <ContactSection socialLinks={socials} />
             <Footer />
         </div>
     );

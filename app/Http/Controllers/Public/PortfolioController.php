@@ -15,11 +15,13 @@ class PortfolioController extends Controller
 {
     public function index()
     {
+
         $about = Cache::remember('portfolio.about', 3600, fn() => About::first());
         $projects = Cache::remember('portfolio.projects', 3600, fn() =>
-        Project::where('is_featured', true)
+        Project::with("tags")
+            ->where('is_featured', true)
             ->orderBy('order')
-            ->get(['id', 'title', 'slug', 'description', 'thumbnail', 'live_url'])
+            ->get(['id', 'title', 'slug','github', 'description', 'thumbnail', 'live_url'])
         );
         $contact = Cache::remember('portfolio.contact', 3600, fn() => Contact::first());
         $socials = Cache::remember('portfolio.socials', 3600, fn() => Social::all());

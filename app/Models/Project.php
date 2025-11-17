@@ -17,6 +17,7 @@ class Project extends Model
     ];
 
     // relationships
+
     public function tags() {
         return $this->belongsToMany(Tag::class);
     }
@@ -33,5 +34,11 @@ class Project extends Model
                 $project->slug = Str::slug($project->title);
             }
         });
+    }
+    public function getThumbnailUrlAttribute()
+    {
+        return $this->thumbnail
+            ? asset('storage/' . $this->thumbnail)
+            : null;
     }
 }

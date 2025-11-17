@@ -1,17 +1,28 @@
 import { motion } from "framer-motion"
-import { Mail, Linkedin, Github, Twitter } from "lucide-react"
+import { Mail, Linkedin, Github, Twitter, ExternalLink } from 'lucide-react';
 import ContactForm from '@/Components/ContactForm';
+import { Social } from '@/lib/models';
 
-export default function ContactSection() {
-    const socialLinks = [
-        { icon: Github, href: "#", label: "GitHub" },
-        { icon: Linkedin, href: "#", label: "LinkedIn" },
-        { icon: Twitter, href: "#", label: "Twitter" },
-        { icon: Mail, href: "mailto:hello@example.com", label: "Email" },
-    ]
 
+interface Props {
+    socialLinks:Social[]
+}
+export default function ContactSection({socialLinks}:Props) {
+    // const socialLinks = [
+    //     { icon: Github, href: "#", label: "GitHub" },
+    //     { icon: Linkedin, href: "#", label: "LinkedIn" },
+    //     { icon: Twitter, href: "#", label: "Twitter" },
+    //     { icon: Mail, href: "mailto:hello@example.com", label: "Email" },
+    // ]
+    const iconMap: Record<string, any> = {
+        github: Github,
+        linkedin: Linkedin,
+        externallink: ExternalLink,
+        email: Mail,
+        twitter:Twitter
+    };
     return (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" id="contact">
             <div className="absolute inset-0 -z-10">
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-neon-purple/10 rounded-full blur-3xl opacity-20" />
             </div>
@@ -82,17 +93,17 @@ export default function ContactSection() {
                             <h4 className="font-semibold text-foreground mb-4">Follow Me</h4>
                             <div className="flex gap-4">
                                 {socialLinks.map((social) => {
-                                    const Icon = social.icon
+                                    const Icon = iconMap[social.provider.toLowerCase()];
                                     return (
                                         <motion.a
                                             key={social.label}
-                                            href={social.href}
+                                            href={social.url}
                                             whileHover={{ scale: 1.1, y: -3 }}
                                             whileTap={{ scale: 0.95 }}
                                             className="p-3 rounded-lg bg-neon-purple/10 border border-neon-purple/30 text-neon-purple hover:bg-neon-purple/20 hover:border-neon-purple/60 transition-all"
-                                            title={social.label}
+                                            title={social.provider as string}
                                         >
-                                            <Icon className="w-5 h-5" />
+                                            <Icon  />
                                         </motion.a>
                                     )
                                 })}

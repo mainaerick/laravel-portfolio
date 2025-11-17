@@ -43,9 +43,8 @@ export default function AboutSection({about,skills}:Props) {
         },
     }
 
-    console.log(about)
     return (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" id="about">
             <div className="absolute inset-0 -z-10">
                 <div className="absolute top-1/2 right-0 w-96 h-96 bg-neon-blue/10 rounded-full blur-3xl opacity-20" />
             </div>
@@ -75,7 +74,7 @@ export default function AboutSection({about,skills}:Props) {
                         className="relative"
                     >
                         <div className="relative w-full aspect-square rounded-2xl overflow-hidden border border-neon-purple/20 bg-gradient-to-br from-neon-purple/10 to-neon-blue/10 backdrop-blur-sm">
-                            <img src={`/storage/${about.avatar as string}`||"/developer-profile.jpg"} alt="Profile" className="w-full h-full object-cover" />
+                            <img src={`${about.avatar as string}`||"/developer-profile.jpg"} alt="Profile" className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
                         </div>
                     </motion.div>

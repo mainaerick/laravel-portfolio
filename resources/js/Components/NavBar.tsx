@@ -1,12 +1,12 @@
 
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
+import { useEffect, useState } from 'react';
 
-interface NavbarProps {
-    activeSection: string
-}
 
-export default function Navbar({ activeSection }: NavbarProps) {
+
+export default function Navbar() {
+    const [activeSection, setActiveSection]= useState("hero")
     const sections = [
         { id: "hero", label: "Home" },
         { id: "about", label: "About" },
@@ -18,8 +18,9 @@ export default function Navbar({ activeSection }: NavbarProps) {
         const element = document.getElementById(id)
         if (element) {
             element.scrollIntoView({ behavior: "smooth" })
-        }
+            setActiveSection(id)        }
     }
+
 
     return (
         <motion.nav

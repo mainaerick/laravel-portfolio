@@ -1,61 +1,66 @@
 import { motion } from "framer-motion"
 import ProjectCard from '@/Components/ProjectCard';
+import { Project } from '@/Pages/Admin/Projects/lib/models';
+const projects = [
+    {
+        id: 1,
+        title: "E-Commerce Platform",
+        description:
+            "A full-featured e-commerce platform with real-time inventory management, payment processing, and admin dashboard.",
+        image: "/ecommerce-platform.jpg",
+        tags: ["React", "Node.js", "PostgreSQL", "Stripe"],
+        github: "#",
+    },
+    {
+        id: 2,
+        title: "Task Management App",
+        description:
+            "Collaborative task management tool with real-time updates, team workspaces, and advanced filtering capabilities.",
+        image: "/task-management-board.png",
+        tags: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
+        github: "#",
+    },
+    {
+        id: 3,
+        title: "Analytics Dashboard",
+        description:
+            "Interactive analytics dashboard with real-time data visualization, custom reports, and export functionality.",
+        image: "/analytics-dashboard.png",
+        tags: ["React", "D3.js", "GraphQL", "Node.js"],
+        github: "#",
+    },
+    {
+        id: 4,
+        title: "Social Media App",
+        description: "Modern social platform with user profiles, feed, messaging, and real-time notifications.",
+        image: "/social-media.jpg",
+        tags: ["Next.js", "Firebase", "Tailwind", "WebSocket"],
+        github: "#",
+    },
+    {
+        id: 5,
+        title: "AI Content Generator",
+        description:
+            "AI-powered content generation tool with multiple templates, batch processing, and content optimization.",
+        image: "/ai-content.jpg",
+        tags: ["React", "OpenAI", "Node.js", "MongoDB"],
+        github: "#",
+    },
+    {
+        id: 6,
+        title: "Design System",
+        description: "Comprehensive design system with reusable components, documentation, and Storybook integration.",
+        image: "/design-system-abstract.png",
+        tags: ["React", "TypeScript", "Storybook", "Tailwind"],
+        github: "#",
+    },
+]
 
-export default function ProjectsSection() {
-    const projects = [
-        {
-            id: 1,
-            title: "E-Commerce Platform",
-            description:
-                "A full-featured e-commerce platform with real-time inventory management, payment processing, and admin dashboard.",
-            image: "/ecommerce-platform.jpg",
-            tags: ["React", "Node.js", "PostgreSQL", "Stripe"],
-            github: "#",
-        },
-        {
-            id: 2,
-            title: "Task Management App",
-            description:
-                "Collaborative task management tool with real-time updates, team workspaces, and advanced filtering capabilities.",
-            image: "/task-management-board.png",
-            tags: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
-            github: "#",
-        },
-        {
-            id: 3,
-            title: "Analytics Dashboard",
-            description:
-                "Interactive analytics dashboard with real-time data visualization, custom reports, and export functionality.",
-            image: "/analytics-dashboard.png",
-            tags: ["React", "D3.js", "GraphQL", "Node.js"],
-            github: "#",
-        },
-        {
-            id: 4,
-            title: "Social Media App",
-            description: "Modern social platform with user profiles, feed, messaging, and real-time notifications.",
-            image: "/social-media.jpg",
-            tags: ["Next.js", "Firebase", "Tailwind", "WebSocket"],
-            github: "#",
-        },
-        {
-            id: 5,
-            title: "AI Content Generator",
-            description:
-                "AI-powered content generation tool with multiple templates, batch processing, and content optimization.",
-            image: "/ai-content.jpg",
-            tags: ["React", "OpenAI", "Node.js", "MongoDB"],
-            github: "#",
-        },
-        {
-            id: 6,
-            title: "Design System",
-            description: "Comprehensive design system with reusable components, documentation, and Storybook integration.",
-            image: "/design-system-abstract.png",
-            tags: ["React", "TypeScript", "Storybook", "Tailwind"],
-            github: "#",
-        },
-    ]
+
+interface Props {
+    projects:Project[]
+}
+export default function ProjectsSection({projects}:Props) {
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -78,7 +83,7 @@ export default function ProjectsSection() {
     }
 
     return (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" id="projects">
             <div className="absolute inset-0 -z-10">
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-neon-purple/10 rounded-full blur-3xl opacity-20" />
                 <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-neon-blue/10 rounded-full blur-3xl opacity-20" />
