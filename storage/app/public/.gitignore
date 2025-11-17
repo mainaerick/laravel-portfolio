@@ -1,5 +1,7 @@
 *
+!avatars/
 !avatars/**
+!projects/
 !projects/**
+!resumes/
 !resumes/**
-!.gitignore
