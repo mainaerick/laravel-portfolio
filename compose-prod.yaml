@@ -24,15 +24,14 @@ services:
     depends_on:
       - portfolio_mysql
       - portfolio_redis
-      - portfolio_meilisearch
       - portfolio_mailpit
-      - portfolio_selenium
 
   portfolio_mysql:
     image: 'mysql/mysql-server:8.0'
     ports:
       - '${FORWARD_DB_PORT:-3307}:3306'  # ⚠️ changed from 3306 to 3307
     environment:
+      MYSQL_HOST: '${DB_HOST}'
       MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
       MYSQL_DATABASE: '${DB_DATABASE}'
       MYSQL_USER: '${DB_USERNAME}'
@@ -51,14 +50,6 @@ services:
     networks:
       - portfolio_net
 
-  portfolio_meilisearch:
-    image: 'getmeili/meilisearch:latest'
-    ports:
-      - '${FORWARD_MEILISEARCH_PORT:-7701}:7700'  # ⚠️ changed from 7700
-    volumes:
-      - 'portfolio-meilisearch:/meili_data'
-    networks:
-      - portfolio_net
 
   portfolio_mailpit:
     image: 'axllent/mailpit:latest'
@@ -68,14 +59,6 @@ services:
     networks:
       - portfolio_net
 
-  portfolio_selenium:
-    image: selenium/standalone-chromium
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-    volumes:
-      - '/dev/shm:/dev/shm'
-    networks:
-      - portfolio_net
 
 networks:
   portfolio_net:
