@@ -160,7 +160,7 @@ class DatabaseSeeder extends Seeder
         // SOCIALS
         $socials = [
             ['provider' => 'GitHub', 'url' => 'https://github.com/mainaerick', 'label' => '@ericnit', 'order' => 1],
-            ['provider' => 'Email', 'url' => 'mailto:niteric@gmail.com', 'label' => 'eric@domain.com', 'order' => 2],
+//            ['provider' => 'Email', 'url' => 'mailto:niteric@gmail.com', 'label' => 'eric@domain.com', 'order' => 2],
         ];
         DB::table('socials')->insert($socials);
 

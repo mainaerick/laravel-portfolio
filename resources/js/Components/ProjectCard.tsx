@@ -8,7 +8,6 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
-    console.log(project.tags)
     return (
         <motion.div
             whileHover={{ y: -8 }}

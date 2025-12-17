@@ -22,7 +22,7 @@ export default function ContactSection({socialLinks}:Props) {
         twitter:Twitter
     };
     return (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden" id="contact">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 relative" id="contact">
             <div className="absolute inset-0 -z-10">
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-neon-purple/10 rounded-full blur-3xl opacity-20" />
             </div>
@@ -72,22 +72,22 @@ export default function ContactSection({socialLinks}:Props) {
                             </p>
                         </div>
 
-                        <div className="space-y-4">
-                            <div className="flex items-start gap-4">
-                                <div className="p-3 rounded-lg bg-neon-purple/10 border border-neon-purple/30 text-neon-purple mt-1">
-                                    <Mail className="w-5 h-5" />
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold text-foreground mb-1">Email</h4>
-                                    <a
-                                        href="mailto:hello@example.com"
-                                        className="text-foreground/70 hover:text-neon-purple transition-colors"
-                                    >
-                                        hello@example.com
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                        {/*<div className="space-y-4">*/}
+                        {/*    <div className="flex items-start gap-4">*/}
+                        {/*        <div className="p-3 rounded-lg bg-neon-purple/10 border border-neon-purple/30 text-neon-purple mt-1">*/}
+                        {/*            <Mail className="w-5 h-5" />*/}
+                        {/*        </div>*/}
+                        {/*        <div>*/}
+                        {/*            <h4 className="font-semibold text-foreground mb-1">Email</h4>*/}
+                        {/*            <a*/}
+                        {/*                href="mailto:hello@example.com"*/}
+                        {/*                className="text-foreground/70 hover:text-neon-purple transition-colors"*/}
+                        {/*            >*/}
+                        {/*                hello@example.com*/}
+                        {/*            </a>*/}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
 
                         <div>
                             <h4 className="font-semibold text-foreground mb-4">Follow Me</h4>

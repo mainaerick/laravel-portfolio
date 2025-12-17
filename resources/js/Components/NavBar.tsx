@@ -36,7 +36,7 @@ export default function Navbar() {
                     transition={{ delay: 0.2 }}
                     className="text-2xl font-bold bg-gradient-to-r from-neon-purple to-neon-blue bg-clip-text text-transparent"
                 >
-                    erick.main
+                    erick.maina
                 </motion.div>
 
                 <div className="hidden md:flex items-center gap-8">
