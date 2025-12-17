@@ -23,8 +23,6 @@ services:
       - portfolio_net
     depends_on:
       - portfolio_mysql
-      - portfolio_redis
-      - portfolio_mailpit
 
   portfolio_mysql:
     image: 'mysql/mysql-server:8.0'
@@ -41,24 +39,6 @@ services:
     networks:
       - portfolio_net
 
-  portfolio_redis:
-    image: 'redis:alpine'
-    ports:
-      - '${FORWARD_REDIS_PORT:-6380}:6379'  # ⚠️ changed from 6379 to 6380
-    volumes:
-      - 'portfolio-redis:/data'
-    networks:
-      - portfolio_net
-
-
-  portfolio_mailpit:
-    image: 'axllent/mailpit:latest'
-    ports:
-      - '${FORWARD_MAILPIT_PORT:-1026}:1025'  # ⚠️ changed from 1025
-      - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8026}:8025'
-    networks:
-      - portfolio_net
-
 
 networks:
   portfolio_net:
@@ -66,8 +46,4 @@ networks:
 
 volumes:
   portfolio-mysql:
-    driver: local
-  portfolio-redis:
-    driver: local
-  portfolio-meilisearch:
     driver: local
